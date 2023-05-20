@@ -1,6 +1,7 @@
 package com.example.weatherforecast.core.di
 
 import com.example.weatherforecast.BuildConfig
+import com.example.weatherforecast.core.data.source.remote.WeatherService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,7 +11,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -52,5 +52,11 @@ object NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeatherService(retrofit: Retrofit): WeatherService {
+        return retrofit.create(WeatherService::class.java)
     }
 }

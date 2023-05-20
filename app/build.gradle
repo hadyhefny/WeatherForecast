@@ -22,9 +22,11 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", findProperty("baseUrl")
+            buildConfigField "String", "API_KEY", findProperty("apiKey")
         }
         release {
             buildConfigField "String", "BASE_URL", findProperty("baseUrl")
+            buildConfigField "String", "API_KEY", findProperty("apiKey")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
