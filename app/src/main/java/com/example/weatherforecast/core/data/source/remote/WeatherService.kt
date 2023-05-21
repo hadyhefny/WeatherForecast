@@ -13,6 +13,7 @@ interface WeatherService {
         @Query("zip") zipCode: String? = null,
         @Query("lat") lat: Double? = null,
         @Query("lon") long: Double? = null,
-        @Query("appid") string: String = BuildConfig.API_KEY
+        @Query("appid") appId: String = BuildConfig.API_KEY,
+        @Query("units") unit: String = "metric"
     ): Single<WeatherMainResponse>
 }

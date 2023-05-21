@@ -26,25 +26,30 @@ class DashboardViewModel @Inject constructor(
     val uiState: StateFlow<DashboardUiState>
         get() = _uiState
 
-    private val _uiError = MutableSharedFlow<Throwable>()
-    val uiError: SharedFlow<Throwable>
+    private val _uiError = MutableSharedFlow<String?>()
+    val uiError: SharedFlow<String?>
         get() = _uiError
 
     fun getSavedLocationWeatherData() {
         getSavedLocationWeatherDataUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                updateError(null)
+                _uiState.value = _uiState.value.copy(isLoading = true)
+            }
             .subscribe({
                 _uiState.value = it.toUiState()
             }, {
-                updateError(it)
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                updateError(it.message)
             })
             .addTo(compositeDisposable)
     }
 
-    private fun updateError(throwable: Throwable) {
+    private fun updateError(error: String?) {
         viewModelScope.launch {
-            _uiError.emit(throwable)
+            _uiError.emit(error)
         }
     }
 
