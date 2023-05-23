@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
     private val viewModel by viewModels<DashboardViewModel>()
-    private val TAG = "AppDebug"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,11 +33,23 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListeners()
+        initCollectors()
         viewModel.getSavedLocationWeatherData()
-        initObservers()
     }
 
-    private fun initObservers() {
+    private fun initListeners() {
+        binding.retryBtn.setOnClickListener {
+            viewModel.getSavedLocationWeatherData()
+        }
+    }
+
+    private fun initCollectors() {
+        renderState()
+        renderEffects()
+    }
+
+    private fun renderState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
@@ -53,7 +64,14 @@ class DashboardFragment : Fragment() {
                         )
                     binding.clLoading.isVisible = it.isLoading
                 }
-                viewModel.uiError.collectLatest {
+            }
+        }
+    }
+
+    private fun renderEffects() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiError.collect {
                     binding.clError.isVisible = !it.isNullOrBlank()
                     binding.errorTv.text = it
                 }

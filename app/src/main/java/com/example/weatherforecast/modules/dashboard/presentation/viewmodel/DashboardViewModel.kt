@@ -26,7 +26,7 @@ class DashboardViewModel @Inject constructor(
     val uiState: StateFlow<DashboardUiState>
         get() = _uiState
 
-    private val _uiError = MutableSharedFlow<String?>()
+    private val _uiError = MutableSharedFlow<String?>(0)
     val uiError: SharedFlow<String?>
         get() = _uiError
 
