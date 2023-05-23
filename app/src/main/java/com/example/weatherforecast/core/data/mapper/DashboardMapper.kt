@@ -1,9 +1,9 @@
 package com.example.weatherforecast.core.data.mapper
 
-import com.example.weatherforecast.core.data.model.WeatherMainResponse
+import com.example.weatherforecast.core.data.model.CurrentWeatherMainResponse
 import com.example.weatherforecast.core.domain.entity.WeatherDataEntity
 
-fun WeatherMainResponse.toEntity() =
+fun CurrentWeatherMainResponse.toEntity() =
     WeatherDataEntity(
         name = name,
         time = dt,

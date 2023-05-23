@@ -1,10 +1,10 @@
-package com.example.weatherforecast.modules.dashboard.presentation.viewmodel
+package com.example.weatherforecast.modules.forecast.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
-import com.example.weatherforecast.modules.dashboard.presentation.mapper.toUiState
-import com.example.weatherforecast.modules.dashboard.presentation.model.DashboardUiState
+import com.example.weatherforecast.modules.forecast.domain.interactor.GetSavedLocationForecastWeatherDataUseCase
+import com.example.weatherforecast.modules.forecast.presentation.mapper.toUiState
+import com.example.weatherforecast.modules.forecast.presentation.model.ForecastUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -18,20 +18,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor(
-    private val getSavedLocationWeatherDataUseCase: GetSavedLocationWeatherDataUseCase
+class ForecastViewModel @Inject constructor(
+    private val getSavedLocationForecastWeatherDataUseCase: GetSavedLocationForecastWeatherDataUseCase
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
-    private val _uiState = MutableStateFlow(DashboardUiState())
-    val uiState: StateFlow<DashboardUiState>
+    private val _uiState = MutableStateFlow(ForecastUiState())
+    val uiState: StateFlow<ForecastUiState>
         get() = _uiState
-
     private val _uiError = MutableSharedFlow<String?>()
     val uiError: SharedFlow<String?>
         get() = _uiError
 
-    fun getSavedLocationWeatherData() {
-        getSavedLocationWeatherDataUseCase.invoke()
+    fun getSavedLocationForecastWeatherData() {
+        getSavedLocationForecastWeatherDataUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -52,10 +51,4 @@ class DashboardViewModel @Inject constructor(
             _uiError.emit(error)
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
-    }
-
 }
