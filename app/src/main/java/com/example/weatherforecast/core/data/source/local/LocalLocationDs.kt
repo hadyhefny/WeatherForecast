@@ -13,6 +13,10 @@ class LocalLocationDs @Inject constructor(private val sharedPreferences: SharedP
         }
     }
 
+    fun saveLocation(location: String) {
+
+    }
+
     companion object {
         private const val DEFAULT_LOCATION = "united states"
     }

@@ -2,6 +2,8 @@ package com.example.weatherforecast.modules.forecast.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.modules.forecast.domain.entity.ForecastWeatherParam
+import com.example.weatherforecast.modules.forecast.domain.interactor.GetLocationForecastWeatherDataUseCase
 import com.example.weatherforecast.modules.forecast.domain.interactor.GetSavedLocationForecastWeatherDataUseCase
 import com.example.weatherforecast.modules.forecast.presentation.mapper.toUiState
 import com.example.weatherforecast.modules.forecast.presentation.model.ForecastUiState
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(
-    private val getSavedLocationForecastWeatherDataUseCase: GetSavedLocationForecastWeatherDataUseCase
+    private val getSavedLocationForecastWeatherDataUseCase: GetSavedLocationForecastWeatherDataUseCase,
+    private val getLocationForecastWeatherDataUseCase: GetLocationForecastWeatherDataUseCase
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     private val _uiState = MutableStateFlow(ForecastUiState())
@@ -31,6 +34,26 @@ class ForecastViewModel @Inject constructor(
 
     fun getSavedLocationForecastWeatherData() {
         getSavedLocationForecastWeatherDataUseCase.invoke()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                updateError(null)
+                _uiState.value = _uiState.value.copy(isLoading = true)
+            }
+            .subscribe({
+                _uiState.value = it.toUiState()
+            }, {
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                updateError(it.message)
+            })
+            .addTo(compositeDisposable)
+    }
+
+    fun getLocationForecastWeatherData(param: ForecastWeatherParam) {
+        if (param.isAllNullOrBlank()) {
+            return
+        }
+        getLocationForecastWeatherDataUseCase.invoke(param)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

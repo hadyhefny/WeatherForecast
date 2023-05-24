@@ -2,4 +2,13 @@
     <string name="app_name">WeatherForecast</string>
     <string name="temp_celsius">%1$s °C</string>
     <string name="retry">Retry</string>
+    <string name="filter">Filter</string>
+    <string name="search_here">Search Here...</string>
+    <string name="select_filter">Select Filter</string>
+    <string name="city_name">City Name</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="lat_long">Latitude/Longitude</string>
+    <string name="current_location">Current Location</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>
