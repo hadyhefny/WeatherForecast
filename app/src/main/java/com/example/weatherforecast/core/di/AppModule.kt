@@ -6,6 +6,7 @@ import com.example.weatherforecast.core.data.repository.WeatherDataRepositoryImp
 import com.example.weatherforecast.core.data.source.local.LocalLocationDs
 import com.example.weatherforecast.core.data.source.remote.WeatherService
 import com.example.weatherforecast.core.domain.repository.WeatherDataRepository
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,8 +26,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideLocalLocationDs(sharedPreferences: SharedPreferences): LocalLocationDs {
-        return LocalLocationDs(sharedPreferences)
+    fun provideGson(): Gson {
+        return Gson()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalLocationDs(sharedPreferences: SharedPreferences, gson: Gson): LocalLocationDs {
+        return LocalLocationDs(sharedPreferences, gson)
     }
 
     @Singleton

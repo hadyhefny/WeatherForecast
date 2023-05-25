@@ -46,6 +46,9 @@ class DashboardFragment : Fragment() {
         binding.forecastBtn.setOnClickListener {
             findNavController().navigate(R.id.forecastFragment)
         }
+        binding.currentWeatherBtn.setOnClickListener {
+            findNavController().navigate(R.id.currentWeatherFragment,)
+        }
     }
 
     private fun initCollectors() {

@@ -9,6 +9,9 @@ buildscript {
         rx_android_version = "3.0.0"
         rx_kotlin_version = "3.0.1"
     }
+    dependencies {
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
 }
 plugins {
     id 'com.android.application' version '8.0.1' apply false

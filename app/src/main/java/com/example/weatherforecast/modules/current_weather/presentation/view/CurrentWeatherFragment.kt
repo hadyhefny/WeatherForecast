@@ -1,6 +1,7 @@
-package com.example.weatherforecast.modules.forecast.presentation.view
+package com.example.weatherforecast.modules.current_weather.presentation.view
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,51 +12,45 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
-import com.example.weatherforecast.databinding.FragmentForecastBinding
+import com.example.weatherforecast.databinding.FragmentCurrentWeatherBinding
+import com.example.weatherforecast.modules.current_weather.presentation.viewmodel.CurrentWeatherViewModel
 import com.example.weatherforecast.core.domain.entity.WeatherParam
-import com.example.weatherforecast.modules.forecast.presentation.view.adapter.ForecastAdapter
-import com.example.weatherforecast.modules.forecast.presentation.viewmodel.ForecastViewModel
+import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment
+import com.example.weatherforecast.modules.recents.presentation.view.RecentFragment.Companion.RECENT_COUNT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class ForecastFragment : Fragment() {
-    private lateinit var binding: FragmentForecastBinding
-    private val viewModel by viewModels<ForecastViewModel>()
-
-    @Inject
-    lateinit var forecastAdapter: ForecastAdapter
+class CurrentWeatherFragment : Fragment() {
+    private lateinit var binding: FragmentCurrentWeatherBinding
+    private val viewModel by viewModels<CurrentWeatherViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentForecastBinding.inflate(inflater, container, false)
+        binding = FragmentCurrentWeatherBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCollectors()
-        initRecyclerView()
         initListeners()
-        viewModel.getSavedLocationForecastWeatherData()
+        initCollectors()
+        viewModel.getSavedLocationWeatherData()
     }
 
     private fun initListeners() {
-        binding.searchTv.setOnClickListener {
-            findNavController().navigate(R.id.recentFragment)
+        binding.retryBtn.setOnClickListener {
+            viewModel.getSavedLocationWeatherData()
         }
-    }
-
-    private fun initRecyclerView() {
-        binding.rv.apply {
-            adapter = forecastAdapter
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.forecastBtn.setOnClickListener {
+            findNavController().navigate(R.id.forecastFragment, Bundle().apply { putInt(RECENT_COUNT, 10) })
+        }
+        binding.searchTv.setOnClickListener {
+            findNavController().navigate(R.id.recentFragment, Bundle().apply { putInt(RECENT_COUNT, 5) })
         }
     }
 
@@ -68,8 +63,15 @@ class ForecastFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
-                    forecastAdapter.submitList(it.items)
-                    binding.cityNameTv.text = it.name
+                    binding.cityNameTv.text = it.cityName
+                    binding.descriptionTv.text = it.description
+                    binding.tempTv.text = getString(R.string.temp_celsius, it.temp.toString())
+                    binding.dateTv.text =
+                        DateUtils.formatDateTime(
+                            context,
+                            TimeUnit.SECONDS.toMillis(it.time),
+                            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME,
+                        )
                     binding.clLoading.isVisible = it.isLoading
                 }
             }
@@ -77,12 +79,12 @@ class ForecastFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 findNavController().currentBackStackEntry?.savedStateHandle?.getStateFlow<WeatherParam?>(
-                    SEARCH_PARAM,
+                    ForecastFragment.SEARCH_PARAM,
                     null
                 )
                     ?.collectLatest {
                         it?.let {
-                            viewModel.getLocationForecastWeatherData(it)
+                            viewModel.getCurrentLocationWeatherData(it)
                         }
                     }
             }
@@ -98,9 +100,5 @@ class ForecastFragment : Fragment() {
                 }
             }
         }
-    }
-
-    companion object {
-        const val SEARCH_PARAM = "search param"
     }
 }

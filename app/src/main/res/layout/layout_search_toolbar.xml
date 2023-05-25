@@ -17,12 +17,11 @@
     <EditText
         android:id="@+id/searchEt"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/search_here"
         android:inputType="text"
         android:maxLines="1"
-        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/goTv"
         app:layout_constraintStart_toEndOf="@id/filterSpinner"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,11 +29,12 @@
     <EditText
         android:id="@+id/searchLatEt"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/latitude"
         android:inputType="numberDecimal"
         android:maxLines="1"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/searchLongEt"
         app:layout_constraintStart_toEndOf="@id/filterSpinner"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,23 +42,22 @@
     <EditText
         android:id="@+id/searchLongEt"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/longitude"
         android:inputType="numberDecimal"
         android:maxLines="1"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/goTv"
         app:layout_constraintStart_toEndOf="@id/searchLatEt"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <TextView
         android:id="@+id/goTv"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:text="Go"
+        android:text="@string/go"
         android:textSize="20sp"
         android:textStyle="bold"
         android:elevation="10dp"

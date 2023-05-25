@@ -1,12 +1,12 @@
-package com.example.weatherforecast.modules.forecast.presentation.viewmodel
+package com.example.weatherforecast.modules.current_weather.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.core.domain.entity.WeatherParam
-import com.example.weatherforecast.modules.forecast.domain.interactor.GetLocationForecastWeatherDataUseCase
-import com.example.weatherforecast.modules.forecast.domain.interactor.GetSavedLocationForecastWeatherDataUseCase
-import com.example.weatherforecast.modules.forecast.presentation.mapper.toUiState
-import com.example.weatherforecast.modules.forecast.presentation.model.ForecastUiState
+import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
+import com.example.weatherforecast.modules.current_weather.domain.interactor.GetCurrentLocationWeatherDataUseCase
+import com.example.weatherforecast.modules.current_weather.presentation.mapper.toUiState
+import com.example.weatherforecast.modules.current_weather.presentation.model.CurrentWeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -20,40 +20,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ForecastViewModel @Inject constructor(
-    private val getSavedLocationForecastWeatherDataUseCase: GetSavedLocationForecastWeatherDataUseCase,
-    private val getLocationForecastWeatherDataUseCase: GetLocationForecastWeatherDataUseCase
+class CurrentWeatherViewModel @Inject constructor(
+    private val getSavedLocationWeatherDataUseCase: GetSavedLocationWeatherDataUseCase,
+    private val getCurrentLocationWeatherDataUseCase: GetCurrentLocationWeatherDataUseCase
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
-    private val _uiState = MutableStateFlow(ForecastUiState())
-    val uiState: StateFlow<ForecastUiState>
+    private val _uiState = MutableStateFlow(CurrentWeatherUiState())
+    val uiState: StateFlow<CurrentWeatherUiState>
         get() = _uiState
+
     private val _uiError = MutableSharedFlow<String?>()
     val uiError: SharedFlow<String?>
         get() = _uiError
 
-    fun getSavedLocationForecastWeatherData() {
-        getSavedLocationForecastWeatherDataUseCase.invoke()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                updateError(null)
-                _uiState.value = _uiState.value.copy(isLoading = true)
-            }
-            .subscribe({
-                _uiState.value = it.toUiState()
-            }, {
-                _uiState.value = _uiState.value.copy(isLoading = false)
-                updateError(it.message)
-            })
-            .addTo(compositeDisposable)
-    }
 
-    fun getLocationForecastWeatherData(param: WeatherParam) {
-        if (param.isAllNullOrBlank()) {
-            return
-        }
-        getLocationForecastWeatherDataUseCase.invoke(param)
+    fun getSavedLocationWeatherData() {
+        getSavedLocationWeatherDataUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -61,7 +43,6 @@ class ForecastViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isLoading = true)
             }
             .subscribe({
-                updateError(null)
                 _uiState.value = it.toUiState()
             }, {
                 _uiState.value = _uiState.value.copy(isLoading = false)
@@ -76,8 +57,25 @@ class ForecastViewModel @Inject constructor(
         }
     }
 
+    fun getCurrentLocationWeatherData(param: WeatherParam) {
+        getCurrentLocationWeatherDataUseCase.invoke(param).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                updateError(null)
+                _uiState.value = _uiState.value.copy(isLoading = true)
+            }
+            .subscribe({
+                _uiState.value = it.toUiState()
+            }, {
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                updateError(it.message)
+            })
+            .addTo(compositeDisposable)
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
     }
+
 }
