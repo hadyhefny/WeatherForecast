@@ -13,11 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.weatherforecast.R
+import com.example.weatherforecast.core.domain.entity.WeatherParam
 import com.example.weatherforecast.databinding.FragmentCurrentWeatherBinding
 import com.example.weatherforecast.modules.current_weather.presentation.viewmodel.CurrentWeatherViewModel
-import com.example.weatherforecast.core.domain.entity.WeatherParam
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment
-import com.example.weatherforecast.modules.recents.presentation.view.RecentFragment.Companion.RECENT_COUNT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,7 +38,6 @@ class CurrentWeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
         initCollectors()
-        viewModel.getSavedLocationWeatherData()
     }
 
     private fun initListeners() {
@@ -47,10 +45,12 @@ class CurrentWeatherFragment : Fragment() {
             viewModel.getSavedLocationWeatherData()
         }
         binding.forecastBtn.setOnClickListener {
-            findNavController().navigate(R.id.forecastFragment, Bundle().apply { putInt(RECENT_COUNT, 10) })
+            findNavController().navigate(R.id.forecastFragment)
         }
         binding.searchTv.setOnClickListener {
-            findNavController().navigate(R.id.recentFragment, Bundle().apply { putInt(RECENT_COUNT, 5) })
+            val action =
+                CurrentWeatherFragmentDirections.actionCurrentWeatherFragmentToRecentFragment(5)
+            findNavController().navigate(action)
         }
     }
 

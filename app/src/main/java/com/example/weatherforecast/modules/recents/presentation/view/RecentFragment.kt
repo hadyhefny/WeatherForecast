@@ -16,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
-import com.example.weatherforecast.databinding.FragmentRecentBinding
 import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.databinding.FragmentRecentBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment.Companion.SEARCH_PARAM
 import com.example.weatherforecast.modules.recents.presentation.view.adapter.RecentAdapter
 import com.example.weatherforecast.modules.recents.presentation.viewmodel.RecentViewModel
@@ -36,6 +36,7 @@ class RecentFragment : Fragment() {
     private val TAG = "AppDebug"
     private var selectedFilter = 0
     private val args: RecentFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

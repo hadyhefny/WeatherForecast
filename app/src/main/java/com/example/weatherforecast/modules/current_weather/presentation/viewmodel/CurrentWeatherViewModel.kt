@@ -33,6 +33,10 @@ class CurrentWeatherViewModel @Inject constructor(
     val uiError: SharedFlow<String?>
         get() = _uiError
 
+    init {
+        getSavedLocationWeatherData()
+    }
+
 
     fun getSavedLocationWeatherData() {
         getSavedLocationWeatherDataUseCase.invoke()
@@ -75,7 +79,7 @@ class CurrentWeatherViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
+        compositeDisposable.dispose()
     }
 
 }

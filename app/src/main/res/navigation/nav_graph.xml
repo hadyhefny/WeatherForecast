@@ -33,12 +33,15 @@
         tools:layout="@layout/fragment_recent" >
         <argument
             android:name="recentCount"
-            app:argType="integer"
-            android:defaultValue="5"/>
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/currentWeatherFragment"
         android:name="com.example.weatherforecast.modules.current_weather.presentation.view.CurrentWeatherFragment"
         android:label="fragment_current_weather"
-        tools:layout="@layout/fragment_current_weather" />
+        tools:layout="@layout/fragment_current_weather" >
+        <action
+            android:id="@+id/action_currentWeatherFragment_to_recentFragment"
+            app:destination="@id/recentFragment" />
+    </fragment>
 </navigation>

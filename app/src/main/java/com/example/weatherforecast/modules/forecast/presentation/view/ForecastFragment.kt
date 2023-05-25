@@ -12,9 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherforecast.R
-import com.example.weatherforecast.databinding.FragmentForecastBinding
 import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.databinding.FragmentForecastBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.adapter.ForecastAdapter
 import com.example.weatherforecast.modules.forecast.presentation.viewmodel.ForecastViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +46,8 @@ class ForecastFragment : Fragment() {
 
     private fun initListeners() {
         binding.searchTv.setOnClickListener {
-            findNavController().navigate(R.id.recentFragment)
+            val action = ForecastFragmentDirections.actionForecastFragmentToRecentFragment(10)
+            findNavController().navigate(action)
         }
     }
 
