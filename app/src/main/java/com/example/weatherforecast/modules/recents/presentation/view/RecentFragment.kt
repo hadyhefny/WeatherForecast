@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
-import com.example.weatherforecast.core.domain.entity.DegreeUnit
 import com.example.weatherforecast.core.data.model.WeatherParam
+import com.example.weatherforecast.core.domain.entity.DegreeUnit
 import com.example.weatherforecast.databinding.FragmentRecentBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment.Companion.SEARCH_PARAM
 import com.example.weatherforecast.modules.recents.presentation.view.adapter.RecentAdapter
@@ -98,12 +98,8 @@ class RecentFragment : Fragment() {
                             .toDoubleOrNull(), unit = unit
                     )
                 }
-
-                4 -> {
-                    // currentLocation
-                }
             }
-            if (selectedFilter != 0 && selectedFilter != 4 && !weatherParam.isAllNullOrBlank()) {
+            if (selectedFilter != 0 && !weatherParam.isAllNullOrBlank()) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     SEARCH_PARAM,
                     weatherParam
@@ -144,8 +140,7 @@ class RecentFragment : Fragment() {
             getString(R.string.select_filter),
             getString(R.string.city_name),
             getString(R.string.zip_code),
-            getString(R.string.lat_long),
-            getString(R.string.current_location)
+            getString(R.string.lat_long)
         )
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, items)
         binding.searchRecentLayout.filterSpinner.adapter = adapter
