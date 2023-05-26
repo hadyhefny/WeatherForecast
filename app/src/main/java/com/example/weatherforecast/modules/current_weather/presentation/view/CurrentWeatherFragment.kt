@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.weatherforecast.R
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.data.model.WeatherParam
 import com.example.weatherforecast.databinding.FragmentCurrentWeatherBinding
 import com.example.weatherforecast.modules.current_weather.presentation.viewmodel.CurrentWeatherViewModel
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment

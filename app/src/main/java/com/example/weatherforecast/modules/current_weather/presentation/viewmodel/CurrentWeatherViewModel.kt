@@ -2,10 +2,10 @@ package com.example.weatherforecast.modules.current_weather.presentation.viewmod
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.core.data.mapper.toEntity
 import com.example.weatherforecast.core.domain.entity.DegreeUnit
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.data.model.WeatherParam
 import com.example.weatherforecast.core.domain.exception.NoLocationSavedException
 import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
 import com.example.weatherforecast.modules.current_weather.domain.interactor.GetCurrentLocationWeatherDataUseCase
@@ -67,7 +67,7 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     fun getCurrentLocationWeatherData(param: WeatherParam) {
-        getCurrentLocationWeatherDataUseCase.invoke(param).subscribeOn(Schedulers.io())
+        getCurrentLocationWeatherDataUseCase.invoke(param.toEntity()).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 updateError(null)

@@ -2,7 +2,8 @@ package com.example.weatherforecast.modules.forecast.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.data.mapper.toEntity
+import com.example.weatherforecast.core.data.model.WeatherParam
 import com.example.weatherforecast.modules.forecast.domain.interactor.GetLocationForecastWeatherDataUseCase
 import com.example.weatherforecast.modules.forecast.domain.interactor.GetSavedLocationForecastWeatherDataUseCase
 import com.example.weatherforecast.modules.forecast.presentation.mapper.toUiState
@@ -57,7 +58,7 @@ class ForecastViewModel @Inject constructor(
         if (param.isAllNullOrBlank()) {
             return
         }
-        getLocationForecastWeatherDataUseCase.invoke(param)
+        getLocationForecastWeatherDataUseCase.invoke(param.toEntity())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

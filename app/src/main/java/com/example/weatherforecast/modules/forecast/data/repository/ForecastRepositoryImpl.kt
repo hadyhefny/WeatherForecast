@@ -2,7 +2,7 @@ package com.example.weatherforecast.modules.forecast.data.repository
 
 import com.example.weatherforecast.core.data.source.local.LocalLocationDs
 import com.example.weatherforecast.core.data.source.remote.WeatherService
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.domain.entity.WeatherParamEntity
 import com.example.weatherforecast.modules.forecast.data.mapper.toEntity
 import com.example.weatherforecast.modules.forecast.domain.entity.ForecastWeatherEntity
 import com.example.weatherforecast.modules.forecast.domain.repository.ForecastRepository
@@ -21,7 +21,7 @@ class ForecastRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getLocationForecastWeatherData(param: WeatherParam): Single<ForecastWeatherEntity> {
+    override fun getLocationForecastWeatherData(param: WeatherParamEntity): Single<ForecastWeatherEntity> {
         return weatherService.getForecastWeatherData(
             cityName = param.cityName,
             zipCode = param.zipCode,

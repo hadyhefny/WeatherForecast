@@ -18,7 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
 import com.example.weatherforecast.core.domain.entity.DegreeUnit
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.data.model.WeatherParam
 import com.example.weatherforecast.databinding.FragmentRecentBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment.Companion.SEARCH_PARAM
 import com.example.weatherforecast.modules.recents.presentation.view.adapter.RecentAdapter

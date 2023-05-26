@@ -1,7 +1,6 @@
 package com.example.weatherforecast.modules.forecast.presentation.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.data.model.WeatherParam
 import com.example.weatherforecast.databinding.FragmentForecastBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.adapter.ForecastAdapter
 import com.example.weatherforecast.modules.forecast.presentation.viewmodel.ForecastViewModel
@@ -75,10 +74,10 @@ class ForecastFragment : Fragment() {
             }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.get<WeatherParam>(
-            ForecastFragment.SEARCH_PARAM
+            SEARCH_PARAM
         )?.let {
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<WeatherParam>(
-                ForecastFragment.SEARCH_PARAM
+                SEARCH_PARAM
             )?.let {
                 viewModel.getLocationForecastWeatherData(it)
             }

@@ -1,6 +1,7 @@
-package com.example.weatherforecast.core.domain.entity
+package com.example.weatherforecast.core.data.model
 
 import android.os.Parcelable
+import com.example.weatherforecast.core.domain.entity.DegreeUnit
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
