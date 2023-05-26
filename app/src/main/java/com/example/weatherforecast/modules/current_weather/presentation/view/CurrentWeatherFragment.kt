@@ -73,21 +73,19 @@ class CurrentWeatherFragment : Fragment() {
                             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME,
                         )
                     binding.clLoading.isVisible = it.isLoading
+                    binding.retryBtn.isVisible = it.isRetryButtonVisible
                 }
             }
         }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                findNavController().currentBackStackEntry?.savedStateHandle?.getStateFlow<WeatherParam?>(
-                    ForecastFragment.SEARCH_PARAM,
-                    null
-                )
-                    ?.collectLatest {
-                        it?.let {
-                            viewModel.getCurrentLocationWeatherData(it)
-                        }
-                    }
+        findNavController().currentBackStackEntry?.savedStateHandle?.get<WeatherParam>(
+            ForecastFragment.SEARCH_PARAM
+        )?.let {
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<WeatherParam>(
+                ForecastFragment.SEARCH_PARAM
+            )?.let {
+                viewModel.getCurrentLocationWeatherData(it)
             }
+
         }
     }
 

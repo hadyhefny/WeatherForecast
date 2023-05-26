@@ -3,6 +3,7 @@ package com.example.weatherforecast.modules.current_weather.presentation.viewmod
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.core.domain.entity.WeatherParam
+import com.example.weatherforecast.core.domain.exception.NoLocationSavedException
 import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
 import com.example.weatherforecast.modules.current_weather.domain.interactor.GetCurrentLocationWeatherDataUseCase
 import com.example.weatherforecast.modules.current_weather.presentation.mapper.toUiState
@@ -29,7 +30,7 @@ class CurrentWeatherViewModel @Inject constructor(
     val uiState: StateFlow<CurrentWeatherUiState>
         get() = _uiState
 
-    private val _uiError = MutableSharedFlow<String?>()
+    private val _uiError = MutableSharedFlow<String?>(1)
     val uiError: SharedFlow<String?>
         get() = _uiError
 
@@ -49,7 +50,7 @@ class CurrentWeatherViewModel @Inject constructor(
             .subscribe({
                 _uiState.value = it.toUiState()
             }, {
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(isLoading = false, isRetryButtonVisible = it !is NoLocationSavedException)
                 updateError(it.message)
             })
             .addTo(compositeDisposable)

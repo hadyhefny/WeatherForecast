@@ -1,6 +1,7 @@
 package com.example.weatherforecast.modules.forecast.presentation.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,6 @@ class ForecastFragment : Fragment() {
         initCollectors()
         initRecyclerView()
         initListeners()
-        viewModel.getSavedLocationForecastWeatherData()
     }
 
     private fun initListeners() {
@@ -74,18 +74,15 @@ class ForecastFragment : Fragment() {
                 }
             }
         }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                findNavController().currentBackStackEntry?.savedStateHandle?.getStateFlow<WeatherParam?>(
-                    SEARCH_PARAM,
-                    null
-                )
-                    ?.collectLatest {
-                        it?.let {
-                            viewModel.getLocationForecastWeatherData(it)
-                        }
-                    }
+        findNavController().currentBackStackEntry?.savedStateHandle?.get<WeatherParam>(
+            ForecastFragment.SEARCH_PARAM
+        )?.let {
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<WeatherParam>(
+                ForecastFragment.SEARCH_PARAM
+            )?.let {
+                viewModel.getLocationForecastWeatherData(it)
             }
+
         }
     }
 

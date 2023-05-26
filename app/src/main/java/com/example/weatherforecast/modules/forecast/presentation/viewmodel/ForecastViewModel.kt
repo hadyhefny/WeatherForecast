@@ -32,7 +32,11 @@ class ForecastViewModel @Inject constructor(
     val uiError: SharedFlow<String?>
         get() = _uiError
 
-    fun getSavedLocationForecastWeatherData() {
+    init {
+        getSavedLocationForecastWeatherData()
+    }
+
+    private fun getSavedLocationForecastWeatherData() {
         getSavedLocationForecastWeatherDataUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

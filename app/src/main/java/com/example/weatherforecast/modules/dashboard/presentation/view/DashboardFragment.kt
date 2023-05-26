@@ -70,6 +70,7 @@ class DashboardFragment : Fragment() {
                             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME,
                         )
                     binding.clLoading.isVisible = it.isLoading
+                    binding.retryBtn.isVisible = it.isRetryButtonVisible
                 }
             }
         }

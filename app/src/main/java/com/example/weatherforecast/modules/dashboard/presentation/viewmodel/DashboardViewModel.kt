@@ -2,6 +2,7 @@ package com.example.weatherforecast.modules.dashboard.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.core.domain.exception.NoLocationSavedException
 import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
 import com.example.weatherforecast.modules.dashboard.presentation.mapper.toUiState
 import com.example.weatherforecast.modules.dashboard.presentation.model.DashboardUiState
@@ -41,7 +42,7 @@ class DashboardViewModel @Inject constructor(
             .subscribe({
                 _uiState.value = it.toUiState()
             }, {
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(isLoading = false, isRetryButtonVisible = it !is NoLocationSavedException)
                 updateError(it.message)
             })
             .addTo(compositeDisposable)

@@ -1,12 +1,12 @@
 package com.example.weatherforecast.modules.recents.presentation.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -33,7 +33,6 @@ class RecentFragment : Fragment() {
     @Inject
     lateinit var recentAdapter: RecentAdapter
     private val viewModel by viewModels<RecentViewModel>()
-    private val TAG = "AppDebug"
     private var selectedFilter = 0
     private val args: RecentFragmentArgs by navArgs()
 
@@ -90,12 +89,18 @@ class RecentFragment : Fragment() {
                     // currentLocation
                 }
             }
-            if (selectedFilter != 0 && selectedFilter != 4) {
+            if (selectedFilter != 0 && selectedFilter != 4 && !weatherParam.isAllNullOrBlank()) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     SEARCH_PARAM,
                     weatherParam
                 )
                 findNavController().popBackStack()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.select_filter_first),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -113,6 +118,8 @@ class RecentFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
                     recentAdapter.submitList(it)
+                    binding.savedLocationsTv.visibility =
+                        if (it.isEmpty()) View.INVISIBLE else View.VISIBLE
                 }
             }
         }
@@ -138,7 +145,6 @@ class RecentFragment : Fragment() {
                     id: Long
                 ) {
                     selectedFilter = position
-                    Log.d(TAG, "onItemSelected:${items[position]} ")
                     if (position == 3) {
                         binding.searchRecentLayout.searchEt.visibility = View.INVISIBLE
                         binding.searchRecentLayout.searchLatEt.visibility = View.VISIBLE
@@ -151,14 +157,7 @@ class RecentFragment : Fragment() {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
-                    // Do nothing
-                    Log.d(TAG, "onNothingSelected: called")
                 }
             }
     }
-
-    companion object {
-        const val RECENT_COUNT = "recent count"
-    }
-
 }

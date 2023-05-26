@@ -5,5 +5,6 @@ data class DashboardUiState(
     val cityName: String = "",
     val time: Long = 0L,
     val description: String = "",
-    val temp: Double = 0.0
+    val temp: Double = 0.0,
+    val isRetryButtonVisible: Boolean = true
 )
