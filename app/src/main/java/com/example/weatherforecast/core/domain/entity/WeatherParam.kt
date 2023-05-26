@@ -8,7 +8,8 @@ data class WeatherParam(
     val cityName: String? = null,
     val zipCode: String? = null,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val unit: DegreeUnit = DegreeUnit.Celsius
 ) : Parcelable {
     fun isAllNullOrBlank(): Boolean {
         return cityName.isNullOrBlank()

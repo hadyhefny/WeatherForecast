@@ -3,8 +3,8 @@ package com.example.weatherforecast.modules.current_weather.presentation.model
 data class CurrentWeatherUiState(
     val isLoading: Boolean = false,
     val cityName: String = "",
-    val time: Long = 0L,
+    val time: String = "",
     val description: String = "",
-    val temp: Double = 0.0,
+    val temp: String = "",
     val isRetryButtonVisible: Boolean = true
 )

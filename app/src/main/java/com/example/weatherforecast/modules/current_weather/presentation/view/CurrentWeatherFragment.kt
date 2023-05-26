@@ -1,7 +1,6 @@
 package com.example.weatherforecast.modules.current_weather.presentation.view
 
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFr
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class CurrentWeatherFragment : Fragment() {
@@ -65,13 +63,8 @@ class CurrentWeatherFragment : Fragment() {
                 viewModel.uiState.collectLatest {
                     binding.cityNameTv.text = it.cityName
                     binding.descriptionTv.text = it.description
-                    binding.tempTv.text = getString(R.string.temp_celsius, it.temp.toString())
-                    binding.dateTv.text =
-                        DateUtils.formatDateTime(
-                            context,
-                            TimeUnit.SECONDS.toMillis(it.time),
-                            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME,
-                        )
+                    binding.tempTv.text = it.temp
+                    binding.dateTv.text = it.time
                     binding.clLoading.isVisible = it.isLoading
                     binding.retryBtn.isVisible = it.isRetryButtonVisible
                 }

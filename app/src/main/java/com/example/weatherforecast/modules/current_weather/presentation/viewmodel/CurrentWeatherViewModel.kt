@@ -1,7 +1,10 @@
 package com.example.weatherforecast.modules.current_weather.presentation.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.core.domain.entity.DegreeUnit
 import com.example.weatherforecast.core.domain.entity.WeatherParam
 import com.example.weatherforecast.core.domain.exception.NoLocationSavedException
 import com.example.weatherforecast.core.domain.interactor.GetSavedLocationWeatherDataUseCase
@@ -23,8 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
     private val getSavedLocationWeatherDataUseCase: GetSavedLocationWeatherDataUseCase,
-    private val getCurrentLocationWeatherDataUseCase: GetCurrentLocationWeatherDataUseCase
-) : ViewModel() {
+    private val getCurrentLocationWeatherDataUseCase: GetCurrentLocationWeatherDataUseCase,
+    private val application: Application
+) : AndroidViewModel(application) {
     private val compositeDisposable = CompositeDisposable()
     private val _uiState = MutableStateFlow(CurrentWeatherUiState())
     val uiState: StateFlow<CurrentWeatherUiState>
@@ -48,7 +52,7 @@ class CurrentWeatherViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isLoading = true)
             }
             .subscribe({
-                _uiState.value = it.toUiState()
+                _uiState.value = it.toUiState(application, DegreeUnit.Celsius)
             }, {
                 _uiState.value = _uiState.value.copy(isLoading = false, isRetryButtonVisible = it !is NoLocationSavedException)
                 updateError(it.message)
@@ -70,7 +74,7 @@ class CurrentWeatherViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isLoading = true)
             }
             .subscribe({
-                _uiState.value = it.toUiState()
+                _uiState.value = it.toUiState(application, param.unit)
             }, {
                 _uiState.value = _uiState.value.copy(isLoading = false)
                 updateError(it.message)

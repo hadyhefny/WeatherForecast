@@ -10,12 +10,23 @@
 
     <Spinner
         android:id="@+id/filterSpinner"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/searchEt"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/searchEt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/searchEt" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/unitSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="@string/celsius"
+        android:textOn="@string/fahrenheit"
+        app:layout_constraintBottom_toTopOf="@id/searchEt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/searchEt"
@@ -26,8 +37,8 @@
         android:inputType="text"
         android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@id/goTv"
-        app:layout_constraintStart_toEndOf="@id/filterSpinner"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterSpinner" />
 
     <EditText
         android:id="@+id/searchLatEt"
@@ -39,8 +50,8 @@
         android:maxLines="1"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/searchLongEt"
-        app:layout_constraintStart_toEndOf="@id/filterSpinner"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterSpinner" />
 
     <EditText
         android:id="@+id/searchLongEt"
@@ -53,7 +64,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/goTv"
         app:layout_constraintStart_toEndOf="@id/searchLatEt"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/filterSpinner" />
 
     <TextView
         android:id="@+id/goTv"

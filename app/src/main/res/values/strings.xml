@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
     <string name="temp_celsius">%1$s °C</string>
+    <string name="temp_fahrenheit">%1$s °F</string>
     <string name="retry">Retry</string>
     <string name="filter">Filter</string>
     <string name="search_here">Search Here...</string>
@@ -18,4 +19,6 @@
     <string name="go">Go</string>
     <string name="you_can_choose_from_saved_locations">You can choose from saved locations:</string>
     <string name="select_filter_first">Please select a filter and write a location first</string>
+    <string name="celsius">Celsius</string>
+    <string name="fahrenheit">Fahrenheit</string>
 </resources>

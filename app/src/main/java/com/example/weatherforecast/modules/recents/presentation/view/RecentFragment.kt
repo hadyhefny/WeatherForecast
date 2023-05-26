@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
+import com.example.weatherforecast.core.domain.entity.DegreeUnit
 import com.example.weatherforecast.core.domain.entity.WeatherParam
 import com.example.weatherforecast.databinding.FragmentRecentBinding
 import com.example.weatherforecast.modules.forecast.presentation.view.ForecastFragment.Companion.SEARCH_PARAM
@@ -35,6 +37,7 @@ class RecentFragment : Fragment() {
     private val viewModel by viewModels<RecentViewModel>()
     private var selectedFilter = 0
     private val args: RecentFragmentArgs by navArgs()
+    private var unit = DegreeUnit.Celsius
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,13 +55,18 @@ class RecentFragment : Fragment() {
         initSpinner()
         initListeners()
         viewModel.getRecentLocations(args.recentCount)
+        binding.searchRecentLayout.unitSwitch.isVisible =
+            findNavController().previousBackStackEntry?.destination?.id == R.id.currentWeatherFragment
     }
 
     private fun initListeners() {
+        binding.searchRecentLayout.unitSwitch.setOnCheckedChangeListener { _, isChecked ->
+            unit = if (isChecked) DegreeUnit.Fahrenheit else DegreeUnit.Celsius
+        }
         recentAdapter.onIemCLicked = {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 SEARCH_PARAM,
-                WeatherParam(cityName = it)
+                WeatherParam(cityName = it, unit = unit)
             )
             findNavController().popBackStack()
         }
@@ -67,13 +75,19 @@ class RecentFragment : Fragment() {
             when (selectedFilter) {
                 1 -> {
                     weatherParam =
-                        WeatherParam(cityName = binding.searchRecentLayout.searchEt.text.toString())
+                        WeatherParam(
+                            cityName = binding.searchRecentLayout.searchEt.text.toString(),
+                            unit = unit
+                        )
 
                 }
 
                 2 -> {
                     weatherParam =
-                        WeatherParam(cityName = binding.searchRecentLayout.searchEt.text.toString())
+                        WeatherParam(
+                            cityName = binding.searchRecentLayout.searchEt.text.toString(),
+                            unit = unit
+                        )
                 }
 
                 3 -> {
@@ -81,7 +95,7 @@ class RecentFragment : Fragment() {
                         latitude = binding.searchRecentLayout.searchLatEt.text.toString()
                             .toDoubleOrNull(),
                         longitude = binding.searchRecentLayout.searchLongEt.text.toString()
-                            .toDoubleOrNull()
+                            .toDoubleOrNull(), unit = unit
                     )
                 }
 

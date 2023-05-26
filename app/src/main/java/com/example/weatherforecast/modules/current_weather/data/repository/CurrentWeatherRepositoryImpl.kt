@@ -18,7 +18,8 @@ class CurrentWeatherRepositoryImpl @Inject constructor(
             cityName = param.cityName,
             zipCode = param.zipCode,
             lat = param.latitude,
-            long = param.longitude
+            long = param.longitude,
+            unit = param.unit.unit
         ).flatMap {
             localLocationDs.saveLocation(it.name).andThen(
                 Single.defer {
